@@ -14,7 +14,7 @@ echo $sort->link('id') . ' | ' . $sort->link('name') . ' | ' . $sort->link('sort
             <th>操作</th>
         </tr>
         <?php foreach ($brands as $row):?>
-            <tr>
+            <tr data_id="<?=$row->id?>">
                 <td><?=$row->id?></td>
                 <td><?=$row->name?></td>
                 <td><?=$row->sort?></td>
@@ -24,8 +24,12 @@ echo $sort->link('id') . ' | ' . $sort->link('name') . ' | ' . $sort->link('sort
                     <img src="<?=$row->logo?>" class="img-circle" style="width: 80px"/>
                 </td>
                 <td>
-                    <a href="<?=\yii\helpers\Url::to(['brand/edit','id'=>$row->id])?>" class="glyphicon glyphicon-pencil"></a>
-                    <a href="<?=\yii\helpers\Url::to(['brand/delete','id'=>$row->id])?>" class="glyphicon glyphicon-trash"></a>
+                    <a href="<?=\yii\helpers\Url::to(['brand/edit','id'=>$row->id])?>" class="btn btn-default">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <a href="javascript:;" class="btn btn-default del_btn">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
                 </td>
             </tr>
         <?php endforeach;?>
@@ -37,3 +41,23 @@ echo \yii\widgets\LinkPager::widget([
     'nextPageLabel'=>'下一页',
     'prevPageLabel'=>'上一页'
 ]);
+//注册JS代码.
+$del_url = \yii\helpers\Url::to(['brand/delete']);
+    $this->registerJs(new \yii\web\JsExpression(
+            <<<JS
+        $(".del_btn").click(function() {
+            if (confirm("确认删除?")){
+                var tr = $(this).closest('tr');
+                var id = tr.attr("data_id");
+            $.post("{$del_url}",{id:id},function(data){
+                if(data == 'success'){
+                    alert('删除成功');
+                    tr.hide('slow');
+                }else{
+                    alert('删除失败');
+                }
+            });
+            }
+        })
+JS
+    ));

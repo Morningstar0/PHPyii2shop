@@ -8,7 +8,7 @@ use yii\data\Sort;
 
 class Article_categoryController extends \yii\web\Controller
 {
-    //显示列表数据.
+    //显示文章分类列表数据.
     public function actionIndex()
     {
         $sort = new Sort([
@@ -61,17 +61,16 @@ class Article_categoryController extends \yii\web\Controller
         return $this->render('add', ['model' => $model]);
     }
     //删除数据
-    public function actionDelete($id)
+    public function actionDelete()
     {
+        $id = \Yii::$app->request->post('id');
         $model = ArticleCategory::findOne($id);
-        $model->status = -1;
-        $model->save(false);
-        if ($model->status == -1) {
-            \Yii::$app->session->setFlash('success', '删除成功');
-        }else{
-            \Yii::$app->session->setFlash('success', '删除失败');
+        if($model){
+            $model->status = -1;
+            $model->save(false);
+            return 'success';
         }
-        return $this->redirect(['article_category/index']);
+        return 'fail';
     }
 
 }

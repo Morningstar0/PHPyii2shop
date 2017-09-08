@@ -2,26 +2,29 @@
 
 namespace backend\models;
 
+use Yii;
+
 /**
- * This is the model class for table "brand".
+ * This is the model class for table "article".
  *
  * @property integer $id
  * @property string $name
  * @property string $intro
- * @property string $logo
+ * @property integer $article_category_id
  * @property integer $sort
  * @property integer $status
+ * @property integer $create_time
  */
-class Brand extends \yii\db\ActiveRecord
+class Article extends \yii\db\ActiveRecord
 {
-  /*  public $file;*/
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'brand';
+        return 'article';
     }
+
     /**
      * @inheritdoc
      */
@@ -30,11 +33,11 @@ class Brand extends \yii\db\ActiveRecord
         return [
             [['name','intro','sort','status'],'required'],
             [['intro'], 'string'],
-            [['sort', 'status'], 'integer'],
+            [['article_category_id', 'sort', 'status', 'create_time'], 'integer'],
             [['name'], 'string', 'max' => 50],
-            [['logo'], 'string', 'max' => 255],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -44,22 +47,16 @@ class Brand extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => '名称',
             'intro' => '简介',
-            'logo' => 'LOGO图片',
+            'article_category_id' => '文章分类id',
             'sort' => '排序',
             'status' => '状态(-1删除 0隐藏 1正常)',
+            'create_time' => '创建时间',
         ];
     }
-/*    //保存图片.
-    public function saveImg(){
-        if($this->file){
-            $file = '/upload/brand/' . uniqid() . '.' . $this->file->getExtension();
-            $this->logo=$file;
-            return $this->file->saveAs(\Yii::getAlias('@webroot') . $file, false);
-        }
-        return true;
-    }*/
-    //删除图片.
-    public function delImg(){
-        unlink(\Yii::getAlias('@webroot').$this->logo);
+    //管理表
+    public function getArticleCategory(){
+        //hasOne() 代表对应一个  参数1 class 关联对象的类名
+        //参数2 表示对应的键 [k=>v]  k表示关联对象的主键  v表示当前对象的关联主键
+        return $this->hasOne(ArticleCategory::className(),['id'=>'article_category_id']);
     }
 }
