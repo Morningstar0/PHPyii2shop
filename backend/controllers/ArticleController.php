@@ -18,7 +18,7 @@ class ArticleController extends \yii\web\Controller
         ]);
         $article = Article::find();
         $pager = new Pagination([
-            'totalCount' => $article->count(),//总数据条数.
+            'totalCount' => $article->where(['>','status',-1])->count(),//总数据条数.
             'defaultPageSize' => 3//每页多少条.
         ]);
         //条件查询.offset为偏移量.limit为取多少条.
@@ -36,9 +36,9 @@ class ArticleController extends \yii\web\Controller
             $article_detail->load($request->post());
             if ($article->validate() && $article_detail->validate()){
                 $article->create_time = time();
-                $article->save(false);
+                $article->save();
                 $article_detail->article_id = $article->id;
-                $article_detail->save(false);
+                $article_detail->save();
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect(['article/index']);
             } else {
@@ -60,9 +60,8 @@ class ArticleController extends \yii\web\Controller
             $article->load($request->post());
             $article_detail->load($request->post());
             if ($article->validate() && $article_detail->validate()){
-                $article->save(false);
-                $article_detail->article_id = $article->id;
-                $article_detail->save(false);
+                $article->save();
+                $article_detail->save();
                 \Yii::$app->session->setFlash('success', '修改成功');
                 return $this->redirect(['article/index']);
             } else {

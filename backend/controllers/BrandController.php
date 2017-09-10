@@ -17,7 +17,7 @@ class BrandController extends \yii\web\Controller
         ]);
         $brands = Brand::find();
         $pager = new Pagination([
-            'totalCount' => $brands->count(),//总数据条数.
+            'totalCount' => $brands->where(['>','status',-1])->count(),//总数据条数.
             'defaultPageSize' => 3//每页多少条.
         ]);
         //条件查询.offset为偏移量.limit为取多少条.
@@ -31,7 +31,7 @@ class BrandController extends \yii\web\Controller
         if ($request->isPost){
             $brand->load($request->post());
             if ($brand->validate()){
-                $brand->save(false);
+                $brand->save();
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect(['brand/index']);
             } else {
@@ -50,7 +50,7 @@ class BrandController extends \yii\web\Controller
         if ($request->isPost){
             $brand->load($request->post());
             if ($brand->validate()){
-                $brand->save(false);
+                $brand->save();
                 \Yii::$app->session->setFlash('success', '修改成功');
                 return $this->redirect(['brand/index']);
             } else {
@@ -68,7 +68,7 @@ class BrandController extends \yii\web\Controller
         $model = Brand::findOne($id);
         if($model){
             $model->status = -1;
-            $model->save(false);
+            $model->save();
             return 'success';
         }
         return 'fail';

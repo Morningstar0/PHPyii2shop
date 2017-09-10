@@ -16,7 +16,7 @@ class Article_categoryController extends \yii\web\Controller
         ]);
         $model = ArticleCategory::find();
         $pager = new Pagination([
-            'totalCount' => $model->count(),//总数据条数.
+            'totalCount' => $model->where(['>','status',-1])->count(),//总数据条数.
             'defaultPageSize' => 3//每页多少条.
         ]);
         //条件查询.offset为偏移量.limit为取多少条.
