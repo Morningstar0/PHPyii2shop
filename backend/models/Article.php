@@ -53,7 +53,7 @@ class Article extends \yii\db\ActiveRecord
             'create_time' => '创建时间',
         ];
     }
-    //管理表
+    //关联表
     public function getArticleCategory(){
         //hasOne() 代表对应一个  参数1 class 关联对象的类名
         //参数2 表示对应的键 [k=>v]  k表示关联对象的主键  v表示当前对象的关联主键

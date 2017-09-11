@@ -10,7 +10,6 @@ echo $sort->link('id') . ' | ' . $sort->link('name') . ' | ' . $sort->link('sort
             <th>简介</th>
             <th>文章分类</th>
             <th>排序</th>
-            <th>状态</th>
             <th>创建时间</th>
             <th>操作</th>
         </tr>
@@ -21,7 +20,6 @@ echo $sort->link('id') . ' | ' . $sort->link('name') . ' | ' . $sort->link('sort
                 <td><?=$row->intro?></td>
                 <td><?=$row->articleCategory->name?></td>
                 <td><?=$row->sort?></td>
-                <td><?=$row->status==0?'隐藏':'正常'?></td>
                 <td><?= date('Y-m-d H:i:s',$row->create_time);?></td>
                 <td>
                     <a href="<?=\yii\helpers\Url::to(['article/edit','id'=>$row->id])?>" class="btn btn-default ">
